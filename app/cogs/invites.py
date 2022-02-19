@@ -1,3 +1,4 @@
+from black import err
 import disnake
 import json
 from datetime import datetime, timedelta
@@ -48,13 +49,46 @@ class Invites(commands.Cog):
                         "invites_used": 0,
                         "invited": []
                     })
+                else:
+                    filter = {
+                        "discord_id": user["discord_id"]
+                    }
+                    values = {
+                        "$set":
+                        {
+                            "role_id": newRole.id,
+                            "purchase_date": today,
+                            "invite_reset": expire,
+                        }
+                    }
+                    mongo.user.update_one(filter, values)
 
         # Check to see if the old role is a membership role.
-        if len(before.roles) > len(after.roles):
+        else:
             oldRole = next(role for role in before.roles if role not in after.roles)
 
             if str(oldRole.id) in MEMBERSHIP_ROLES:
                 print('role removed')
+
+                fetch = mongo.user.find_one({
+                "discord_id": after.id
+                })
+
+                filter = {
+                    "discord_id": fetch["discord_id"]
+                }
+
+                values = {
+
+                    "$set":
+                    {
+                        "role_id": 0,
+                        "purchase_date": 0,
+                        "invite_reset": 0,
+                        "invites_used": 0,
+                    },
+                }
+                mongo.user.update_one(filter, values)
                 # TODO: Add the logic for when the role is removed such as removing role_id, purchase_date, invite_reset, invites_used.
 
 
@@ -131,6 +165,7 @@ class Invites(commands.Cog):
             content = "You do not have an active subscription. \nVisit https://pay.karna.ge/ to use this command.",
             ephemeral = True
         )
+        raise error
 
 
 
