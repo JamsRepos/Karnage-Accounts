@@ -1,6 +1,4 @@
-from black import err
 import disnake
-import json
 from datetime import datetime, timedelta
 import time
 
@@ -89,7 +87,6 @@ class Invites(commands.Cog):
                     },
                 }
                 mongo.user.update_one(filter, values)
-                # TODO: Add the logic for when the role is removed such as removing role_id, purchase_date, invite_reset, invites_used.
 
 
 
@@ -165,7 +162,6 @@ class Invites(commands.Cog):
             content = "You do not have an active subscription. \nVisit https://pay.karna.ge/ to use this command.",
             ephemeral = True
         )
-        raise error
 
 
 

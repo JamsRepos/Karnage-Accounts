@@ -31,11 +31,11 @@ mongo = mongo[os.getenv("MONGO_DB", "karnagebot")]
 
 
 
-print("Loading Cogs")
+print("Loading Cogs:")
 for cogs in os.listdir("./app/cogs"):
     if cogs.endswith(".py"):
         bot.load_extension(f"cogs.{cogs[:-3]}")
-        print(f"{cogs} loaded")
+        print(f"    - {cogs[:-3].capitalize()} loaded!")
 
 @bot.event
 async def on_ready():
