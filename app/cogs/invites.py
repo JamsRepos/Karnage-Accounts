@@ -86,7 +86,8 @@ class Invites(commands.Cog):
             response, code = await callJfaApi(endpoint="invites", type="post", header=headers, body=data)
             if code == 200:
                 await inter.response.send_message(
-                    f"Invite created & private messaged to {targetName}!"
+                    content = f"Invite created & private messaged to {targetName}!",
+                    ephemeral = True
                 )
 
                 filter = {
@@ -108,11 +109,13 @@ class Invites(commands.Cog):
                 mongo.user.update_one(filter, values)
             else:
                 await inter.response.send_message(
-                    f"Invite creation failed! ``Error code: http-{code}``"
+                    content = f"Invite creation failed! ``Error code: http-{code}``",
+                    ephemeral = True
                 )
         else:
             await inter.response.send_message(
-                f"You have reached your limit for this month!"
+                content = f"You have reached your limit for this month!",
+                ephemeral = True
             )
 
 
