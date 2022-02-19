@@ -60,6 +60,8 @@ class Invites(commands.Cog):
 
 
     @commands.slash_command(description="Sends an invite to the target User.")
+    # TODO: Make these dynamic with the database called 'roles'.
+    @commands.has_any_role("./ developer")
     async def invite(self, inter: disnake.ApplicationCommandInteraction, user: disnake.User):
         """Creates an invite"""
 
@@ -118,6 +120,17 @@ class Invites(commands.Cog):
                 ephemeral = True
             )
 
+
+
+    # TODO: Make this more reliable, currently captures all errors.
+    @commands.Cog.listener("on_slash_command_error")
+    async def slash_command_exception_handler(
+        self, inter: disnake.ApplicationCommandInteraction, error
+    ):
+        await inter.response.send_message(
+            content = "You do not have an active subscription. \nVisit https://pay.karna.ge/ to use this command.",
+            ephemeral = True
+        )
 
 
 

@@ -1,3 +1,5 @@
+# TODO: Move this to a core.py cog.
+
 import requests
 import json
 from jsonmerge import merge
