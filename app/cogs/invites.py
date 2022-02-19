@@ -54,14 +54,13 @@ class Invites(commands.Cog):
             oldRole = next(role for role in before.roles if role not in after.roles)
 
             if str(oldRole.id) in MEMBERSHIP_ROLES:
+                print('role removed')
                 # TODO: Add the logic for when the role is removed such as removing role_id, purchase_date, invite_reset, invites_used.
 
 
 
     @commands.slash_command(description="Sends an invite to the target User.")
-    async def invite(
-        self, inter: disnake.ApplicationCommandInteraction, user: disnake.User
-    ):
+    async def invite(self, inter: disnake.ApplicationCommandInteraction, user: disnake.User):
         """Creates an invite"""
 
         callerName = str(inter.user)
