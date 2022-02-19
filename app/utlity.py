@@ -1,5 +1,6 @@
 # TODO: Move this to a core.py cog.
 
+import aiohttp
 import requests
 import json
 from jsonmerge import merge
@@ -31,10 +32,12 @@ async def requestType(url, type, headers, body=None):
 
 async def grabJfaKey():
     url = "https://account.karna.ge/token/login"
-    request = requests.get(url, auth=(JFA_USERNAME, JFA_PASSWORD ))
-    request = json.loads(request.content)
-    request = "Bearer " + str(request["token"])
-    return request
+    auth = aiohttp.BasicAuth(login=JFA_USERNAME,password=JFA_PASSWORD)
+    async with aiohttp.ClientSession(auth=auth) as session:
+        async with session.get(url) as response:
+            json = await response.json()
+            request = "Bearer " + str(json["token"])
+            return request
 
 async def callJfaApi(endpoint, type, header, body=None):
     url = f"https://account.karna.ge/{endpoint}"
