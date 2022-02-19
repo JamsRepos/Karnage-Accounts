@@ -1,7 +1,7 @@
 {
     "days": 1,
     "hours": 2,
-    "label": "Test",
+    "label": "InviteLabel",
     "minutes": 3,
     "months": 0,
     "send-to": "Venom#0006",

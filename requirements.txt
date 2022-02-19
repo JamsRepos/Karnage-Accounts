@@ -1,2 +1,14 @@
+# D:\Github\Discord\Karnage-Accounts\app\bot.py: 2,5
 disnake == 2.4.0
+
+# D:\Github\Discord\Karnage-Accounts\app\utlity.py: 3
+jsonmerge == 1.8.0
+
+# D:\Github\Discord\Karnage-Accounts\app\bot.py: 6
+pymongo == 4.0.1
+
+# D:\Github\Discord\Karnage-Accounts\app\config.py: 2
 python_dotenv == 0.19.2
+
+# D:\Github\Discord\Karnage-Accounts\app\utlity.py: 1
+requests == 2.27.1
