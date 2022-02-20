@@ -61,6 +61,5 @@ async def callJfaApi(endpoint, type, header, body=None):
         "Authorization": await grabJfaKey()
     }
     headers = merge(header, headers)
-    # FIXME: json return causing errors when used.
     response = await asyncRequestType(url=url, type=type, body=body, headers=headers)
     return response
