@@ -4,7 +4,6 @@ import sys
 
 from motor.motor_asyncio import AsyncIOMotorClient
 from disnake.ext import commands
-from pymongo import MongoClient
 from cum import cum
 
 from config import BOT_TOKEN, GUILD_ID
