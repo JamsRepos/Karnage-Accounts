@@ -148,27 +148,14 @@ class Invites(commands.Cog):
                 content = f"You have reached your limit for this month!",
                 ephemeral = True
             )
-    # @invite.error
-    # async def invite_error(inter: disnake.ApplicationCommandInteraction, error):
-    #     if isinstance(error, commands.BadArgument):
-    #         await inter.response.send_message(
-    #             content = "You do not have an active subscription. \nVisit https://pay.karna.ge/ to use this command.",
-    #             ephemeral = True
-    #         )
 
-
-
-
-    # # TODO: Make this more reliable, currently captures all errors.
-    # @commands.Cog.listener("on_slash_command_error")
-    # async def slash_command_exception_handler(
-    #     self, inter: disnake.ApplicationCommandInteraction, error
-    # ):
-    #     await inter.response.send_message(
-    #         content = "You do not have an active subscription. \nVisit https://pay.karna.ge/ to use this command.",
-    #         ephemeral = True
-    #     )
-    #     raise error
+    @invite.error
+    async def invite_error(self, inter: disnake.ApplicationCommandInteraction, error):
+        if isinstance(error, commands.MissingAnyRole):
+            await inter.response.send_message(
+                content = "You do not have an active subscription. \nVisit https://pay.karna.ge/ to use this command.",
+                ephemeral = True
+            )
 
 
 
