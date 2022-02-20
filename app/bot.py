@@ -2,6 +2,7 @@ import os
 import disnake
 import sys
 
+from motor.motor_asyncio import AsyncIOMotorClient
 from disnake.ext import commands
 from pymongo import MongoClient
 from cum import cum
@@ -12,22 +13,21 @@ intents = disnake.Intents.default()
 intents.members = True
 intents.presences = True
 
-bot = commands.Bot(command_prefix=">", test_guilds=[GUILD_ID], intents=intents)
+bot = commands.Bot(command_prefix="!", test_guilds=[GUILD_ID], intents=intents)
 
 cum()
 
-print("Connecting to MongoDB")
-mongo = MongoClient(
+mongo = AsyncIOMotorClient(
     os.getenv("MONGO_IP", "localhost"),
     int(os.getenv("MONGO_PORT", 27017))
 )
 
 try:
     mongo.server_info()
+    mongo = mongo[os.getenv("MONGO_DB", "karnagebot")]
+    print("Connected to MongoDB")
 except Exception:
     sys.exit("Could not connect to MongoDB")
-
-mongo = mongo[os.getenv("MONGO_DB", "karnagebot")]
 
 
 

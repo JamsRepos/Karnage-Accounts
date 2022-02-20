@@ -34,11 +34,12 @@ class Invites(commands.Cog):
                 expire = datetime.now() + timedelta(days=31)
                 expire = int(time.mktime(expire.timetuple())) # Formats to UNIX.
 
-                user = mongo.user.find_one({
+                userExist = await mongo.user.find_one({
                     "discord_id": after.id
                 })
-                if not user:
-                    mongo.user.insert_one({
+
+                if not userExist:
+                    await mongo.user.insert_one({
                         "discord_id": after.id,
                         "role_id": newRole.id,
                         "purchase_date": today,
@@ -49,7 +50,7 @@ class Invites(commands.Cog):
                     })
                 else:
                     filter = {
-                        "discord_id": user["discord_id"]
+                        "discord_id": userExist["discord_id"]
                     }
                     values = {
                         "$set":
@@ -59,19 +60,19 @@ class Invites(commands.Cog):
                             "invite_reset": expire,
                         }
                     }
-                    mongo.user.update_one(filter, values)
+                    await mongo.user.update_one(filter, values)
 
         # Check to see if the old role is a membership role.
         else:
             oldRole = next(role for role in before.roles if role not in after.roles)
 
             if str(oldRole.id) in MEMBERSHIP_ROLES:
-                fetch = mongo.user.find_one({
+                userExist = await mongo.user.find_one({
                 "discord_id": after.id
                 })
 
                 filter = {
-                    "discord_id": fetch["discord_id"]
+                    "discord_id": userExist["discord_id"]
                 }
 
                 values = {
@@ -84,7 +85,7 @@ class Invites(commands.Cog):
                         "invites_used": 0,
                     },
                 }
-                mongo.user.update_one(filter, values)
+                await mongo.user.update_one(filter, values)
 
 
 
@@ -97,7 +98,7 @@ class Invites(commands.Cog):
         callerName = str(inter.user)
         callerId = inter.user.id
         targetName = str(user)
-        fetch = mongo.user.find_one({
+        fetch = await mongo.user.find_one({
             "discord_id": callerId
         })
         callerCount = fetch["total_invites"]
@@ -137,7 +138,7 @@ class Invites(commands.Cog):
                     }
                 }
 
-                mongo.user.update_one(filter, values)
+                await mongo.user.update_one(filter, values)
             else:
                 await inter.response.send_message(
                     content = f"Invite creation failed! ``Error code: http-{response.status}``",
