@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import time
 
 from bot import mongo
-from config import GUILD_ID, MEMBERSHIP_ROLES
+from config import MEMBERSHIP_ROLES
 from utlity import callJfaApi, readTemplate
 from disnake import Member
 from disnake.ext import commands
@@ -66,8 +66,6 @@ class Invites(commands.Cog):
             oldRole = next(role for role in before.roles if role not in after.roles)
 
             if str(oldRole.id) in MEMBERSHIP_ROLES:
-                print('role removed')
-
                 fetch = mongo.user.find_one({
                 "discord_id": after.id
                 })
@@ -116,8 +114,8 @@ class Invites(commands.Cog):
                 "accept": "application/json",
             }
 
-            response, code = await callJfaApi(endpoint="invites", type="post", header=headers, body=data)
-            if code == 200:
+            response = await callJfaApi(endpoint="invites", type="post", header=headers, body=data)
+            if response.status == 200:
                 await inter.response.send_message(
                     content = f"Invite created & private messaged to {targetName}!",
                     ephemeral = True
