@@ -1,6 +1,4 @@
 # TODO: Move this to a core.py cog.
-
-from urllib import response
 import aiohttp
 import json
 from jsonmerge import merge
@@ -16,9 +14,22 @@ async def readTemplate(template):
     Returns:
         json: JSON Response of the file data.
     """
+
     return json.load(open(f"app/templates/{template}.json"))
 
 async def asyncRequestType(url, type, headers, body=None):
+    """Called when we need to grab a HTTP request.
+
+    Args:
+        url (str): Specifies the URL of where the request should be sent.
+        type (str): Specifies the type of the request.
+        headers (json): Sets the headers for the request.
+        body (json, optional): Set when the request type needs a payload, often a POST. Defaults to None.
+
+    Returns:
+        object: Returns an object containing the payload response & status code.
+    """
+
     async with aiohttp.ClientSession(headers=headers) as session:
         if type == 'post':
             async with session.post(url=url, json=body) as response:
@@ -33,19 +44,11 @@ async def asyncRequestType(url, type, headers, body=None):
             async with session.delete(url=url, json=body) as response:
                 return response
 
-# async def requestType(url, type, headers, body=None):
-#     if type == 'post':
-#         response = requests.post(url=url, json=body, headers=headers)
-#     if type == 'get':
-#         response = requests.get(url=url, headers=headers)
-#     if type == 'put':
-#         response = requests.put(url=url, json=body, headers=headers)
-#     if type == 'del':
-#         response = requests.delete(url=url, json=body, headers=headers)
-
     return response
 
 async def grabJfaKey():
+    """"Converts basic auth to an API token."""
+
     url = "https://account.karna.ge/token/login"
     auth = aiohttp.BasicAuth(login=JFA_USERNAME,password=JFA_PASSWORD)
     async with aiohttp.ClientSession(auth=auth) as session:
@@ -55,6 +58,18 @@ async def grabJfaKey():
             return request
 
 async def callJfaApi(endpoint, type, header, body=None):
+    """Creates an API call for the JFA API.
+
+    Args:
+        endpoint (str): Specifies what endpoint to call from the API.
+        type (str): Specifies the type of the request.
+        header (json): Sets the headers for the request.
+        body (json, optional): Set when the request type needs a payload, often a POST. Defaults to None.
+
+    Returns:
+        object: Returns an object containing the payload response & status code.
+    """
+
     url = f"https://account.karna.ge/{endpoint}"
 
     headers = {

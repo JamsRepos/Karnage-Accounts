@@ -9,7 +9,7 @@ from disnake import Member
 from disnake.ext import commands
 
 class Invites(commands.Cog):
-    """This will be for a ping command."""
+    """Creates the invite cog which contains core invitation generation & management functionality."""
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -140,7 +140,7 @@ class Invites(commands.Cog):
                 mongo.user.update_one(filter, values)
             else:
                 await inter.response.send_message(
-                    content = f"Invite creation failed! ``Error code: http-{code}``",
+                    content = f"Invite creation failed! ``Error code: http-{response.status}``",
                     ephemeral = True
                 )
         else:
