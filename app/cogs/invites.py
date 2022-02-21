@@ -4,7 +4,7 @@ import time
 
 from bot import mongo
 from config import MEMBERSHIP_ROLES
-from utlity import callJfaApi, readTemplate
+from helpers.api import callJfaApi, readTemplate
 from disnake import Member
 from disnake.ext import commands
 
