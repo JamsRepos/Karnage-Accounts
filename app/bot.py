@@ -12,7 +12,7 @@ intents = disnake.Intents.default()
 intents.members = True
 intents.presences = True
 
-bot = commands.Bot(command_prefix="!", test_guilds=[GUILD_ID], intents=intents)
+bot = commands.Bot(command_prefix="!", test_guilds=[GUILD_ID], intents=intents, )
 
 cum()
 
