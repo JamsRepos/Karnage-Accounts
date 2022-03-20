@@ -6,7 +6,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from disnake.ext import commands
 from cum import cum
 
-from config import BOT_TOKEN, GUILD_ID
+from config import BOT_TOKEN, GUILD_ID, MONGO_IP, MONGO_PORT
 
 intents = disnake.Intents.default()
 intents.members = True
@@ -17,8 +17,8 @@ bot = commands.Bot(command_prefix="!", test_guilds=[GUILD_ID], intents=intents, 
 cum()
 
 mongo = AsyncIOMotorClient(
-    os.getenv("MONGO_IP", "localhost"),
-    int(os.getenv("MONGO_PORT", 27017))
+    os.getenv("MONGO_IP", MONGO_IP),
+    int(os.getenv("MONGO_PORT", MONGO_PORT))
 )
 
 try:
