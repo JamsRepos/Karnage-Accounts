@@ -3,7 +3,7 @@ import aiohttp
 import json
 from jsonmerge import merge
 
-from config import JFA_USERNAME,JFA_PASSWORD
+from config import WORK_DIR, JFA_USERNAME, JFA_PASSWORD
 
 async def readTemplate(template):
     """To read from a template which often stores a structure.
@@ -15,7 +15,7 @@ async def readTemplate(template):
         json: JSON Response of the file data.
     """
 
-    return json.load(open(f"app/templates/{template}.json"))
+    return json.load(open(WORK_DIR + f"app/templates/{template}.json"))
 
 async def asyncRequestType(url, type, headers, body=None):
     """Called when we need to grab a HTTP request.

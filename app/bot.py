@@ -6,7 +6,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from disnake.ext import commands
 from cum import cum
 
-from config import BOT_TOKEN, GUILD_ID, MONGO_IP, MONGO_PORT
+from config import WORK_DIR, BOT_TOKEN, GUILD_ID, MONGO_IP, MONGO_PORT
 
 intents = disnake.Intents.default()
 intents.members = True
@@ -31,7 +31,7 @@ except Exception:
 
 
 print("Loading Cogs:")
-for cogs in os.listdir("/app/cogs"):
+for cogs in os.listdir(WORK_DIR + "app/cogs"):
     if cogs.endswith(".py"):
         bot.load_extension(f"cogs.{cogs[:-3]}")
         print(f"    - {cogs[:-3].capitalize()} loaded!")
