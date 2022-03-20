@@ -91,7 +91,7 @@ class Invites(commands.Cog):
 
     @commands.slash_command(description="Sends an invite to the target User.")
     # TODO: Make these dynamic with the database called 'roles'.
-    @commands.has_any_role(MEMBERSHIP_ROLES)
+    @commands.has_any_role('Infected')
     async def invite(self, inter: disnake.ApplicationCommandInteraction, user: disnake.User):
         """Creates an invite"""
 
