@@ -102,9 +102,16 @@ class Invites(commands.Cog):
             "discord_id": callerId
         })
         callerCount = fetch["total_invites"]
+        roleId = fetch["role_id"]
+        maxInvites = 2
+
+        if roleId == 932360494101196820: # Walker
+            maxInvites = 4
+        elif roleId == 925065635141156874: # Crawler
+            maxInvites = 3
 
         # TODO: Change this to a database called `roles` which can be updated via an admin command.
-        if fetch["invites_used"] <= 3:
+        if fetch["invites_used"] <= maxInvites:
             # TODO: Figure out a way to make the expiry date actually work properly.
             data = await readTemplate(template="invite")
             data["send-to"] = targetName
