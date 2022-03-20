@@ -104,7 +104,7 @@ class Invites(commands.Cog):
         callerCount = fetch["total_invites"]
         roleId = fetch["role_id"]
         maxInvites = 2
-
+        print(f"Checking how many invites they should have.")
         if roleId == 932360494101196820: # Walker
             maxInvites = 4
         elif roleId == 925065635141156874: # Crawler
@@ -164,6 +164,7 @@ class Invites(commands.Cog):
                 content = "You do not have an active subscription. \nVisit https://pay.karna.ge/ to use this command.",
                 ephemeral = True
             )
+        raise error
 
 
 

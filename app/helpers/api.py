@@ -51,6 +51,7 @@ async def grabJfaKey():
 
     url = "https://account.karna.ge/token/login"
     auth = aiohttp.BasicAuth(login=JFA_USERNAME,password=JFA_PASSWORD)
+    print("Getting JFA API KEY")
     async with aiohttp.ClientSession(auth=auth) as session:
         async with session.get(url) as response:
             json = await response.json()
@@ -69,7 +70,7 @@ async def callJfaApi(endpoint, type, header, body=None):
     Returns:
         object: Returns an object containing the payload response & status code.
     """
-
+    print(f"Calling JFA API: {endpoint}")
     url = f"https://account.karna.ge/{endpoint}"
 
     headers = {
@@ -77,4 +78,5 @@ async def callJfaApi(endpoint, type, header, body=None):
     }
     headers = merge(header, headers)
     response = await asyncRequestType(url=url, type=type, body=body, headers=headers)
+    print(f"Response From JFA API: {response}")
     return response
