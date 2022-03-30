@@ -13,41 +13,20 @@ class Settings(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.slash_command(description="Mongo Test")
-    async def mongo(self, inter: disnake.ApplicationCommandInteraction):
+    @commands.slash_command(description="Adds/Removes someone from accessing media libraries.")
+    # TODO: Make these dynamic with the database called 'roles'.
+    @commands.has_any_role('Infected')
+    async def whitelist(self, inter: disnake.ApplicationCommandInteraction, userid: str):
+        """Creates an invite"""
 
-        payload = {
-            'cunt': 'cunt'
-        }
-        result = await mongo.settings.insert_one(payload)
-        await inter.response.send_message(
-            content= f'It worked. {result.inserted_id}',
-            ephemeral= True
-        )
-
-    # TODO: Change this to a env setting for staff roles.
-    @commands.group(invoke_without_command=True)
-    @commands.has_any_role(676592497249746954)
-    async def membership(self, ctx):
-        await ctx.reply("Parent command!")
-
-    @membership.command()
-    async def add(self, ctx, role=None, role2=None, role3=None):
-        await ctx.reply(f"1: {role} 2: {role2} 3:{role3}")
-        # r = await mongo.roles.intert_one()
-    @membership.command()
-    async def remove(self, ctx, role=None, role2=None, role3=None):
-        await ctx.reply("Child command!")
-
-    @membership.command()
-    async def settings(self, ctx):
-        await ctx.reply("Child command!")
-
-
-    @membership.error
-    async def membership_error(self, ctx, error):
+    @whitelist.error
+    async def whitelist_error(self, inter: disnake.ApplicationCommandInteraction, error):
         if isinstance(error, commands.MissingAnyRole):
-            await ctx.reply("You do not have access to the command.")
+            await inter.response.send_message(
+                content = "You do not have permission to run this command.",
+                ephemeral = True
+            )
+        raise error
 
 
 def setup(bot: commands.Bot):
