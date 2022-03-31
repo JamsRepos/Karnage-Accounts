@@ -7,7 +7,7 @@ import aiohttp
 
 from bot import mongo
 from disnake.ext import commands
-from config import JELLYFIN_API_KEY
+from config import JELLYFIN_API_KEY, WHITELIST_IP, WHITELIST_PORT
 
 class Settings(commands.Cog):
     """Creates the invite cog which contains core invitation generation & management functionality."""
@@ -22,10 +22,9 @@ class Settings(commands.Cog):
     async def whitelist(self, inter: disnake.ApplicationCommandInteraction, type: str = commands.Param(choices=["add", "remove"]), userid: str = commands.Param(name="userid")):
         """Creates an invite"""
         http = aiohttp.ClientSession()
-        api_key = JELLYFIN_API_KEY
-        url = "http://jellyfin-session-kicker:8887"
+        url = f"http://{WHITELIST_IP}:{WHITELIST_PORT}"
         json = {"UserId": userid, "MediaTypes": ["episode"]}
-        headers = {"Authorization": "Basic " + f":{api_key}"}
+        headers = {"Authorization": "Basic " + f":{JELLYFIN_API_KEY}"}
 
         if type == "add":
             async with http.post(url, json=json, headers=headers) as resp:
