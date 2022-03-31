@@ -4,10 +4,11 @@
 # [ ]: Make a `!api <SERVICE> <KEY>` command to add the API Key for each service.
 import disnake
 import aiohttp
+import base64
 
 from bot import mongo
 from disnake.ext import commands
-from config import JELLYFIN_API_KEY, WHITELIST_IP, WHITELIST_PORT
+from config import WHITELIST_API_KEY, WHITELIST_IP, WHITELIST_PORT
 
 class Settings(commands.Cog):
     """Creates the invite cog which contains core invitation generation & management functionality."""
@@ -24,7 +25,11 @@ class Settings(commands.Cog):
         http = aiohttp.ClientSession()
         url = f"http://{WHITELIST_IP}:{WHITELIST_PORT}"
         json = {"UserId": userid, "MediaTypes": ["episode"]}
-        headers = {"Authorization": "Basic " + f":{JELLYFIN_API_KEY}"}
+        headers = {
+            "Authorization": "Basic " + base64.b64encode(
+                f":{WHITELIST_API_KEY}".encode()
+            ).decode()
+        }
 
         if type == "add":
             async with http.post(url, json=json, headers=headers) as resp:
