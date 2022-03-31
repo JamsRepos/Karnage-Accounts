@@ -20,11 +20,15 @@ class Settings(commands.Cog):
     @commands.slash_command(description="Adds/Removes someone from accessing media libraries.")
     # TODO: Make these dynamic with the database called 'roles'.
     @commands.has_any_role('Support')
-    async def whitelist(self, inter: disnake.ApplicationCommandInteraction, type: str = commands.Param(choices=["add", "remove"]), userid: str = commands.Param(name="userid")):
+    async def whitelist(self, inter: disnake.ApplicationCommandInteraction, type: str = commands.Param(choices=["add", "remove"]), userid: str = commands.Param(name="userid"), access: str = commands.Param(choices=["shows", "livetv"])):
         """Creates an invite"""
         http = aiohttp.ClientSession()
         url = f"http://{WHITELIST_IP}:{WHITELIST_PORT}"
-        json = {"UserId": userid, "MediaTypes": ["episode"]}
+        if access == "shows":
+            content = ["episode"]
+        elif access == "livetv":
+            content = ["livetvchannel", "livetvprogram"]
+        json = {"UserId": userid, "MediaTypes": content}
         headers = {
             "Authorization": "Basic " + base64.b64encode(
                 f":{WHITELIST_API_KEY}".encode()
