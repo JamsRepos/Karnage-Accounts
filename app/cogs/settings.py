@@ -3,21 +3,56 @@
 # [ ]: Make a `!membership settings` command to specify individual settings for the added roles.
 # [ ]: Make a `!api <SERVICE> <KEY>` command to add the API Key for each service.
 import disnake
+import aiohttp
 
 from bot import mongo
 from disnake.ext import commands
+from config import JELLYFIN_API_KEY
 
 class Settings(commands.Cog):
     """Creates the invite cog which contains core invitation generation & management functionality."""
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        http = aiohttp.ClientSession()
 
     @commands.slash_command(description="Adds/Removes someone from accessing media libraries.")
     # TODO: Make these dynamic with the database called 'roles'.
     @commands.has_any_role('Infected')
-    async def whitelist(self, inter: disnake.ApplicationCommandInteraction, userid: str):
+    async def whitelist(self, inter: disnake.ApplicationCommandInteraction, type: str = commands.Param(choices=["add", "remove"]), userid: str = commands.Param(name="userid")):
         """Creates an invite"""
+        http = aiohttp.ClientSession()
+        api_key = JELLYFIN_API_KEY
+        url = "jellyfin-session-kicker:8887"
+        json = {"UserId": userid, "MediaTypes": ["episode"]}
+        headers = {"Authorization": "Basic " + f":{api_key}"}
+
+        if type == "add":
+            async with http.post(url, json=json, headers=headers) as resp:
+                if resp.status == 200:
+                    await inter.response.send_message(
+                        content = "Success.",
+                        ephemeral = True
+                    )
+                else:
+                    await inter.response.send_message(
+                        content = f"There was an error: {resp.status}",
+                        ephemeral = True
+                    )
+        elif type == "remove":
+            async with http.post(url, json=json, headers=headers) as resp:
+                if resp.status == 200:
+                    await inter.response.send_message(
+                        content = "Success.",
+                        ephemeral = True
+                    )
+                else:
+                    await inter.response.send_message(
+                        content = f"There was an error: {resp.status}",
+                        ephemeral = True
+                    )
+
+        await http.close()
 
     @whitelist.error
     async def whitelist_error(self, inter: disnake.ApplicationCommandInteraction, error):
