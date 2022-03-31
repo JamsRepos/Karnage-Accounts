@@ -18,7 +18,7 @@ class Settings(commands.Cog):
 
     @commands.slash_command(description="Adds/Removes someone from accessing media libraries.")
     # TODO: Make these dynamic with the database called 'roles'.
-    @commands.has_any_role('Infected')
+    @commands.has_any_role('Support')
     async def whitelist(self, inter: disnake.ApplicationCommandInteraction, type: str = commands.Param(choices=["add", "remove"]), userid: str = commands.Param(name="userid")):
         """Creates an invite"""
         http = aiohttp.ClientSession()
