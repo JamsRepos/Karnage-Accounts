@@ -23,7 +23,7 @@ class Settings(commands.Cog):
         """Creates an invite"""
         http = aiohttp.ClientSession()
         api_key = JELLYFIN_API_KEY
-        url = "jellyfin-session-kicker:8887"
+        url = "http://jellyfin-session-kicker:8887"
         json = {"UserId": userid, "MediaTypes": ["episode"]}
         headers = {"Authorization": "Basic " + f":{api_key}"}
 
