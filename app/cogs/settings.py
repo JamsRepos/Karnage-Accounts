@@ -27,7 +27,7 @@ class Settings(commands.Cog):
         if access == "shows":
             content = ["episode"]
         elif access == "livetv":
-            content = ["livetvchannel", "livetvprogram"]
+            content = ["livetvchannel", "livetvprogram", "tvchannel", "tvprogram"]
         json = {"UserId": userid, "MediaTypes": content}
         headers = {
             "Authorization": "Basic " + base64.b64encode(
