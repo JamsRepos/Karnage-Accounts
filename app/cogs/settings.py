@@ -48,7 +48,7 @@ class Settings(commands.Cog):
                         ephemeral = True
                     )
         elif type == "remove":
-            async with http.post(url, json=json, headers=headers) as resp:
+            async with http.delete(url, json=json, headers=headers) as resp:
                 if resp.status == 200:
                     await inter.response.send_message(
                         content = "Success.",
