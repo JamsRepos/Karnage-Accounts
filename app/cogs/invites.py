@@ -89,9 +89,8 @@ class Invites(commands.Cog):
 
 
 
-    @commands.slash_command(description="Sends an invite to the target User.")
+    @commands.slash_command(description="Sends an invite to the target user.")
     # TODO: Make these dynamic with the database called 'roles'.
-    @commands.has_any_role('Infected')
     async def invite(self, inter: disnake.ApplicationCommandInteraction, user: disnake.User):
         """Creates an invite"""
 
@@ -154,6 +153,59 @@ class Invites(commands.Cog):
         else:
             await inter.response.send_message(
                 content = f"You have reached your limit for this month!",
+                ephemeral = True
+            )
+
+    @commands.slash_command(description="Sends an invite to the target user.")
+    # TODO: Make these dynamic with the database called 'roles'.
+    async def staffinvite(self, inter: disnake.ApplicationCommandInteraction, user: disnake.User):
+        """Creates an invite"""
+
+        callerName = str(inter.user)
+        callerId = inter.user.id
+        targetName = str(user)
+        fetch = await mongo.user.find_one({
+            "discord_id": callerId
+        })
+        callerCount = fetch["total_invites"]
+
+        # TODO: Figure out a way to make the expiry date actually work properly.
+        data = await readTemplate(template="invite")
+        data["send-to"] = targetName
+        data["label"] = "Invite For: " + targetName + " | Invited By: " + callerName
+
+        headers = {
+            "Content-Type": "application/json",
+            "accept": "application/json",
+        }
+
+        response = await callJfaApi(endpoint="invites", type="post", header=headers, body=data)
+        if response.status == 200:
+            await inter.response.send_message(
+                content = f"Invite created & private messaged to {targetName}!",
+                ephemeral = True
+            )
+
+            filter = {
+                "discord_id": fetch["discord_id"]
+            }
+
+            values = {
+                "$set":
+                {
+                    "total_invites": callerCount + 1,
+                    "invites_used": callerCount + 1,
+                },
+                "$push":
+                {
+                    "invited": user.id
+                }
+            }
+
+            await mongo.user.update_one(filter, values)
+        else:
+            await inter.response.send_message(
+                content = f"Invite creation failed! ``Error code: http-{response.status}``",
                 ephemeral = True
             )
 
