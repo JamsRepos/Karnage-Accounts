@@ -104,9 +104,9 @@ class Invites(commands.Cog):
         roleId = fetch["role_id"]
         maxInvites = 2
         print(f"Checking how many invites they should have.")
-        if roleId == 932360494101196820: # Walker
+        if roleId == 932360494101196820: # Bandit
             maxInvites = 4
-        elif roleId == 925065635141156874: # Crawler
+        elif roleId == 925065635141156874: # Survivor
             maxInvites = 3
 
         # TODO: Change this to a database called `roles` which can be updated via an admin command.

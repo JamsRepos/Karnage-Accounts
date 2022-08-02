@@ -5,6 +5,7 @@
 import disnake
 import aiohttp
 import base64
+import asyncio
 
 from bot import mongo
 from disnake.ext import commands
@@ -16,6 +17,22 @@ class Settings(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         http = aiohttp.ClientSession()
+
+    @commands.slash_command(description="Add/Remove a user to a membership plan.")
+    @commands.has_role("Support")
+    async def membership(self, inter: disnake.ApplicationCommandInteraction, username: str = commands.Param(description="This must be case-sensitive, otherwise it will not work."), duration: str = commands.Param(description="This should be formatted as +1 month(s) or +14 day(s)."), package: str = commands.Param(choices=["Survivor", "Bandit"], description="Which package should be given to them. If this is different to what they have already, it will reset their time.") ):
+        """Add/Remove a user to a membership plan."""
+        discordId = inter.author.id
+        http = aiohttp.ClientSession()
+        url = f"https://kofi.karna.ge/webhook.php?staffDiscordID={discordId}&targetKarnageName={username}&targetTimeLength={duration}&targetTierPackage={package}"
+
+        async with http as session:
+            async with session.get(url) as response:
+                if response.status == 200:
+                    await inter.response.send_message(
+                        content = "The action was successful. Please double check <#935859459580899388> to ensure it was applied.",
+                        ephemeral = True
+                    )
 
     @commands.slash_command(description="Adds/Removes someone from accessing media libraries.")
     # TODO: Make these dynamic with the database called 'roles'.

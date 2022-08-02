@@ -3,7 +3,7 @@ import aiohttp
 import json
 from jsonmerge import merge
 
-from config import WORK_DIR, JFA_USERNAME, JFA_PASSWORD
+from config import WORK_DIR, JFA_USERNAME, JFA_PASSWORD, JELLYFIN_API_KEY
 
 async def readTemplate(template):
     """To read from a template which often stores a structure.
@@ -36,7 +36,7 @@ async def asyncRequestType(url, type, headers, body=None):
                 return response
         if type == 'get':
             async with session.get(url=url) as response:
-                return response
+                return await response.json()
         if type == 'put':
             async with session.put(url=url, json=body) as response:
                 return response
@@ -80,3 +80,23 @@ async def callJfaApi(endpoint, type, header, body=None):
     response = await asyncRequestType(url=url, type=type, body=body, headers=headers)
     print(f"Response From JFA API: {response}")
     return response
+
+async def getJellyfinUsers():
+    """Creates an API call for the Jellyfin API."""
+
+    print(f"Calling Jellyfin API: Users")
+    url = f"http://localhost:8096/Users"
+
+    headers = {
+        "Content-Type": "application/json",
+        "accept": "application/json",
+        "X-Emby-Authorization": f"MediaBrowser Client=\"Payments\", DeviceId=\"Webhook\", Device=\"1\", Version=\"1.0\", Token=\"{JELLYFIN_API_KEY}\""
+    }
+
+    response = await asyncRequestType(url=url, type="get", body=None, headers=headers)
+    print(f"Response From Jellyfin API: {response}")
+
+    jellyUsers = []
+    for user in response:
+        jellyUsers.append(user['Name'])
+    return jellyUsers

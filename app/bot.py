@@ -11,6 +11,7 @@ from config import WORK_DIR, BOT_TOKEN, GUILD_ID, MONGO_IP, MONGO_PORT
 intents = disnake.Intents.default()
 intents.members = True
 intents.presences = True
+intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", test_guilds=[GUILD_ID], intents=intents, )
 
