@@ -34,50 +34,50 @@ class Settings(commands.Cog):
                         ephemeral = True
                     )
 
-    # @commands.slash_command(description="Adds/Removes someone from accessing media libraries.")
-    # # TODO: Make these dynamic with the database called 'roles'.
-    # @commands.has_any_role('Support')
-    # async def whitelist(self, inter: disnake.ApplicationCommandInteraction, type: str = commands.Param(choices=["add", "remove"]), userid: str = commands.Param(name="userid"), access: str = commands.Param(choices=["shows", "livetv"])):
-    #     """Creates an invite"""
-    #     http = aiohttp.ClientSession()
-    #     url = f"http://{WHITELIST_IP}:{WHITELIST_PORT}"
-    #     if access == "shows":
-    #         content = ["episode"]
-    #     elif access == "livetv":
-    #         content = ["tvchannel"]
-    #     json = {"UserId": userid, "MediaTypes": content}
-    #     headers = {
-    #         "Authorization": "Basic " + base64.b64encode(
-    #             f":{WHITELIST_API_KEY}".encode()
-    #         ).decode()
-    #     }
+    @commands.slash_command(description="Adds/Removes someone from accessing media libraries.")
+    # TODO: Make these dynamic with the database called 'roles'.
+    @commands.has_any_role('Support')
+    async def whitelist(self, inter: disnake.ApplicationCommandInteraction, type: str = commands.Param(choices=["add", "remove"]), userid: str = commands.Param(name="userid"), access: str = commands.Param(choices=["shows", "livetv"])):
+        """Creates an invite"""
+        http = aiohttp.ClientSession()
+        url = f"http://{WHITELIST_IP}:{WHITELIST_PORT}"
+        if access == "shows":
+            content = ["episode"]
+        elif access == "livetv":
+            content = ["tvchannel"]
+        json = {"UserId": userid, "MediaTypes": content}
+        headers = {
+            "Authorization": "Basic " + base64.b64encode(
+                f":{WHITELIST_API_KEY}".encode()
+            ).decode()
+        }
 
-    #     if type == "add":
-    #         async with http.post(url, json=json, headers=headers) as resp:
-    #             if resp.status == 200:
-    #                 await inter.response.send_message(
-    #                     content = "Success.",
-    #                     ephemeral = True
-    #                 )
-    #             else:
-    #                 await inter.response.send_message(
-    #                     content = f"There was an error: {resp.status}",
-    #                     ephemeral = True
-    #                 )
-    #     elif type == "remove":
-    #         async with http.delete(url, json=json, headers=headers) as resp:
-    #             if resp.status == 200:
-    #                 await inter.response.send_message(
-    #                     content = "Success.",
-    #                     ephemeral = True
-    #                 )
-    #             else:
-    #                 await inter.response.send_message(
-    #                     content = f"There was an error: {resp.status}",
-    #                     ephemeral = True
-    #                 )
+        if type == "add":
+            async with http.post(url, json=json, headers=headers) as resp:
+                if resp.status == 200:
+                    await inter.response.send_message(
+                        content = "Success.",
+                        ephemeral = True
+                    )
+                else:
+                    await inter.response.send_message(
+                        content = f"There was an error: {resp.status}",
+                        ephemeral = True
+                    )
+        elif type == "remove":
+            async with http.delete(url, json=json, headers=headers) as resp:
+                if resp.status == 200:
+                    await inter.response.send_message(
+                        content = "Success.",
+                        ephemeral = True
+                    )
+                else:
+                    await inter.response.send_message(
+                        content = f"There was an error: {resp.status}",
+                        ephemeral = True
+                    )
 
-    #     await http.close()
+        await http.close()
 
     @whitelist.error
     async def whitelist_error(self, inter: disnake.ApplicationCommandInteraction, error):
