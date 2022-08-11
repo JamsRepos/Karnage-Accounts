@@ -20,7 +20,7 @@ class Settings(commands.Cog):
 
     @commands.slash_command(description="Add/Remove a user to a membership plan.")
     @commands.has_role("Support")
-    async def membership(self, inter: disnake.ApplicationCommandInteraction, username: str = commands.Param(description="This must be case-sensitive, otherwise it will not work."), duration: str = commands.Param(description="This should be formatted as +1 month(s) or +14 day(s)."), package: str = commands.Param(choices=["Survivor", "Bandit"], description="Which package should be given to them. If this is different to what they have already, it will reset their time.") ):
+    async def membership(self, inter: disnake.ApplicationCommandInteraction, username: str = commands.Param(description="This must be case-sensitive, otherwise it will not work."), duration: str = commands.Param(description="This should be formatted as +1 month(s) or +14 day(s)."), package: str = commands.Param(choices=["Survivor", "Bandit"], description="Which package should be given. If this is differs to what they have already it will reset time.") ):
         """Add/Remove a user to a membership plan."""
         discordId = inter.author.id
         http = aiohttp.ClientSession()
