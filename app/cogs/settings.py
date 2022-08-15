@@ -24,7 +24,7 @@ class Settings(commands.Cog):
         """Add/Remove a user to a membership plan."""
         discordId = inter.author.id
         http = aiohttp.ClientSession()
-        url = f"https://kofi.karna.ge/webhook.php?staffDiscordID={discordId}&targetKarnageName={username}&targetTimeLength={duration}&targetTierPackage={package}"
+        url = f"https://pay.karna.ge/webhook.php?staffDiscordID={discordId}&targetKarnageName={username}&targetTimeLength={duration}&targetTierPackage={package}"
 
         async with http as session:
             async with session.get(url) as response:
